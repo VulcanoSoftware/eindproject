@@ -41,52 +41,173 @@ This modular design allows flexible scaling, safer storage expansion, and future
 ```mermaid
 flowchart TB
 
-subgraph CORE["CORE SERVICES"]
-    C1[Scanner]
-    C2[Filter Engine]
-    C3[Disk Selector]
-    C4[File Mover]
-    C5[Integrity Validator]
+%% =====================================================
+%% USER LAYER
+%% =====================================================
+
+subgraph L1["USER INTERFACE"]
+    direction LR
+
+    UI1[Dashboard]
+    UI2[Config GUI]
+    UI3[File Manager]
+    UI4[Backup Selector]
+    UI5[Statistics]
+    UI6[Disk Health]
 end
 
-subgraph STORAGE["STORAGE LAYER"]
-    D1[(Disk 1)]
-    D2[(Disk 2)]
-    D3[(Disk 3)]
-    D4[(Disk N)]
+%% =====================================================
+%% API LAYER
+%% =====================================================
+
+subgraph L2["API LAYER"]
+    direction LR
+
+    API1[REST API]
+    API2[Authentication]
+    API3[Session Manager]
+    API4[Realtime Events]
 end
 
-subgraph VFS["VIRTUAL FILESYSTEM"]
+UI1 --> API1
+UI2 --> API1
+UI3 --> API1
+UI4 --> API1
+UI5 --> API1
+UI6 --> API1
+
+API1 --> API2 --> API3 --> API4
+
+%% =====================================================
+%% CORE LAYER
+%% =====================================================
+
+subgraph L3["CORE SERVICES"]
+    direction LR
+
+    C1[Config Loader]
+    C2[Scheduler]
+    C3[Disk Monitor]
+    C4[Recovery Engine]
+    C5[Notification System]
+end
+
+API4 --> C1 --> C2 --> C3 --> C4 --> C5
+
+%% =====================================================
+%% FILE PROCESSING
+%% =====================================================
+
+subgraph L4["FILE PROCESSING PIPELINE"]
+    direction LR
+
+    P1[Scanner]
+    P2[Filter Engine]
+    P3[Priority Queue]
+    P4[Disk Selector]
+    P5[File Mover]
+    P6[Integrity Validator]
+end
+
+C2 --> P1
+P1 --> P2 --> P3 --> P4 --> P5 --> P6
+
+%% =====================================================
+%% REDUNDANCY LAYER
+%% =====================================================
+
+subgraph L5["BACKUP & REDUNDANCY"]
+    direction LR
+
+    B1[Backup Strategy Engine]
+    B2[Reverse RAID]
+    B3[Parity Simulation]
+    B4[Redundancy Layer]
+    B5[Self-Healing Recovery]
+end
+
+P4 -.-> B1
+B1 --> B2 --> B3 --> B4 --> B5
+B5 -.-> P5
+C4 -.-> B5
+
+%% =====================================================
+%% STORAGE LAYER
+%% =====================================================
+
+subgraph L6["STORAGE LAYER"]
+    direction TB
+
+    DS[(Storage Aggregation Layer)]
+
+    subgraph DISKS["PHYSICAL STORAGE"]
+        direction LR
+        D1[(Disk 1)]
+        D2[(Disk 2)]
+        D3[(Disk 3)]
+        D4[(Disk N)]
+    end
+end
+
+P6 --> DS
+C4 -.-> DS
+
+DS --> D1
+DS --> D2
+DS --> D3
+DS --> D4
+
+%% =====================================================
+%% VIRTUAL FILESYSTEM
+%% =====================================================
+
+subgraph L7["VIRTUAL FILESYSTEM"]
+    direction LR
+
     V1[Path Mapping]
     V2[Namespace Manager]
-    V3[Collision Resolver]
-    V4[Metadata Cache]
+    V3[Resolver]
+    V4[Collision Resolver]
+    V5[Metadata Cache]
 end
 
-subgraph ACCESS["ACCESS LAYER"]
+DS --> V1 --> V2 --> V3 --> V4 --> V5
+
+%% =====================================================
+%% ACCESS LAYER
+%% =====================================================
+
+subgraph L8["ACCESS LAYER"]
+    direction LR
+
     A1[FUSE]
     A2[SFTP]
     A3[WebDAV]
     A4[S3-Compatible API]
 end
 
-C1 --> C2 --> C3 --> C4 --> C5
-C5 --> D1
-C5 --> D2
-C5 --> D3
-C5 --> D4
+V5 --> A1
+V5 --> A2
+V5 --> A3
+V5 --> A4
 
-D1 --> V1
-D2 --> V1
-D3 --> V1
-D4 --> V1
+%% =====================================================
+%% MONITORING
+%% =====================================================
 
-V1 --> V2 --> V3 --> V4
+subgraph L9["MONITORING & ANALYTICS"]
+    direction LR
 
-V4 --> A1
-V4 --> A2
-V4 --> A3
-V4 --> A4
+    M1[Discord Webhooks]
+    M2[Realtime Logs]
+    M3[Usage Analytics]
+    M4[Health Metrics]
+end
+
+C5 --> M1
+P5 --> M2
+P6 --> M3
+C3 --> M4
 ```
 
 ---
