@@ -4,11 +4,9 @@ const config = {
   tagline: 'Structured documentation for scalable multi-disk orchestration',
   favicon: 'img/favicon.ico',
 
-  // De URL waar je site op komt te staan
   url: 'https://eindproject.vercel.app',
   baseUrl: '/',
 
-  // BELANGRIJK: Voorkomt dat de build faalt door gebroken links naar ./intro
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
@@ -29,10 +27,10 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          routeBasePath: '/', // Dit maakt de docs je landingspagina
+          routeBasePath: '/', 
           sidebarPath: require.resolve('./sidebars.js'),
         },
-        blog: false, // Blog uitgeschakeld voor een pure documentatie-site
+        blog: false,
         pages: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -49,7 +47,7 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            sidebarId: 'docsSidebar', // DIT IS GEFIXT (was tutorialSidebar)
             position: 'left',
             label: 'Documentation',
           },
