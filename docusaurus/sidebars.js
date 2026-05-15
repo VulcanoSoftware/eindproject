@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
   docsSidebar: [
     'intro',
     'architecture',
@@ -8,5 +8,6 @@
     'access-layer',
     'configuration',
     'use-cases',
+    'virtualisatie',
   ],
 };

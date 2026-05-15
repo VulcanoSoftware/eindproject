@@ -1,13 +1,13 @@
-﻿---
+---
 id: core-services
 title: Core Services
 ---
 
 # Core Services
 
-Core services coordinate scheduling, health, and system safety before and during file operations.
+Core services coördineren scheduling, gezondheid en systeemveiligheid vóór en tijdens bestandsoperaties.
 
-## Service Coordination
+## Service coördinatie
 
 ```mermaid
 flowchart LR
@@ -20,7 +20,7 @@ flowchart LR
     SCH[Scheduler]
     MON[Disk Monitor]
     REC[Recovery Engine]
-    NOTIF[Notifications]
+    NOTIF[Notifications / Discord]
   end
 
   subgraph Storage
@@ -40,28 +40,52 @@ flowchart LR
   class STATE storage;
 ```
 
-## Components
+## Componenten
 
-- Config Loader: validates startup configuration and service toggles.
-- Scheduler: orchestrates recurring scan and maintenance cycles.
-- Disk Monitor: tracks free space, availability, and health indicators.
-- Recovery Engine: supports degraded operation and reintegration.
-- Notifications: emits operational events and warning signals.
+- **Config Loader:** valideert opstartconfiguratie en service-toggles. Bij ontbrekend `config.yml` start een interactieve wizard.
+- **Scheduler:** orkestreert terugkerende scan- en onderhoudscycli op basis van `scan_interval_seconds`.
+- **Disk Monitor:** houdt vrije ruimte, beschikbaarheid en gezondheidsstatussen bij.
+- **Recovery Engine:** ondersteunt gedegradeerde werking en herintegration na schijfherstel.
+- **Notifications:** stuurt operationele events en waarschuwingen via Discord webhook of console-output.
+
+## Startup preflight
+
+Bij elke start voert het programma een preflight-check uit die rapporteert over:
+
+- OS en Python-versie
+- Admin/root-rechten
+- FUSE-beschikbaarheid en mount-punt
+- Ingeschakelde services (FUSE, WebDAV, SFTP, NFS)
+- Installatieadvies voor ontbrekende dependencies
+
+Deze output verschijnt zowel in de console als via de Discord webhook (indien geconfigureerd).
+
+## Discord notificaties
+
+Configureer `webhook_url` in `config.yml` met een Discord webhook URL om meldingen te ontvangen over:
+
+- Bestandsverplaatsingen en -verwijderingen
+- Schijfruimtewaarschuwingen
+- Server-opstartstatussen
+- Fouten en herstelgebeurtenissen
+
+Laat `webhook_url` leeg of weg om notificaties uit te schakelen.
 
 <details>
-<summary>Advanced details</summary>
+<summary>Geavanceerde details</summary>
 
-- Startup preflight can gate service enablement based on dependency readiness.
-- Recovery integrates with validation outcomes and disk health telemetry.
-- Notifications can map to webhooks for remote alerting and observability.
+- Startup preflight kan service-inschakeling blokkeren op basis van dependency-gereedheid.
+- Recovery integreert met validatie-uitkomsten en schijfgezondheidstelemetrie.
+- Notificaties sturen naar één Discord webhook; voor meerdere kanalen kan een Discord-bot als doorstuurpunt dienen.
+- De NFS-service vereist Docker Engine; als Docker ontbreekt, wordt de NFS-server niet gestart en verschijnt een foutmelding.
 
 </details>
 
-## Navigation
+## Navigatie
 
-- [Back to Intro](./intro)
+- [Terug naar Intro](./intro)
 
-## Related Pages
+## Gerelateerde pagina's
 
 - [Architecture](./architecture)
 - [Processing Pipeline](./processing-pipeline)

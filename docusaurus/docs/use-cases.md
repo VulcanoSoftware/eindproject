@@ -1,13 +1,13 @@
-﻿---
+---
 id: use-cases
 title: Use Cases
 ---
 
 # Use Cases
 
-These scenarios show practical deployments of MultiDisk FileBalancer in production-like environments.
+Deze scenario's tonen praktische deployments van MultiDisk FileBalancer in productie-achtige omgevingen.
 
-## Scenario Map
+## Scenario-overzicht
 
 ```mermaid
 flowchart LR
@@ -23,7 +23,7 @@ flowchart LR
 
   subgraph Storage
     POOL[Disk Pool + VFS]
-    ACCESS[FUSE/SFTP/WebDAV/S3]
+    ACCESS[FUSE/SFTP/WebDAV/NFS]
   end
 
   TEAM --> ORCH --> POOL --> ACCESS --> APPS
@@ -38,36 +38,39 @@ flowchart LR
   class POOL,ACCESS storage;
 ```
 
-## Real-Life Examples
+## Praktische voorbeelden
 
-- Automated backup server: ingest backup outputs, age-gate transfers, and protect free space with cleanup rules.
-- Media archive platform: unify multiple disks under one namespace and serve remote reads over SFTP/WebDAV.
-- Home or SMB NAS: expand storage incrementally without RAID striping constraints.
-- Data ingestion pipeline: collect files rapidly, prioritize queue execution, and validate post-move integrity.
-- Migration and reprocessing: use reverse workflows to bring files back to central processing stages.
+- **Geautomatiseerde backupserver:** backup-outputs ingesteren, overdrachten via leeftijdsgrens beheren en vrije ruimte beschermen met cleanup-regels.
+- **Media-archiefplatform:** meerdere schijven samenvoegen onder één namespace en remote leesbewerkingen aanbieden via SFTP of WebDAV.
+- **Thuis- of KMO-NAS:** opslag incrementeel uitbreiden zonder RAID-striping beperkingen.
+- **Data-ingest pipeline:** bestanden snel verzamelen, queue-uitvoering prioriteren en post-move integriteit valideren.
+- **Migratie en herverwerking:** reverse workflows gebruiken om bestanden terug te brengen naar centrale verwerkingsfasen.
+- **Linux VM-omgeving:** het programma draaien in een Debian VM op VirtualBox met gedeelde mappen als schijfpoel — zie de [Virtualisatiegids](./virtualisatie).
 
-## Practical Scenarios
+## Praktische scenario's
 
-- Disk failure handling: continue operations on healthy disks with isolated impact.
-- Bursty workloads: tune queueing and scan intervals for predictable throughput.
-- Mixed protocol clients: expose one VFS to local mounts and object-compatible tooling.
+- **Schijfuitval:** operaties voortzetten op gezonde schijven met geïsoleerde impact.
+- **Piekbelasting:** queueing en scanintervallen afstemmen voor voorspelbare doorvoer.
+- **Gemengde protocol-clients:** één VFS blootstellen aan lokale mounts en NFS-clients tegelijkertijd.
+- **Automatische opruiming:** Space Hunter instellen om de oudste bestanden te verwijderen of te verplaatsen zodra vrije ruimte een drempel bereikt.
 
 <details>
-<summary>Advanced details</summary>
+<summary>Geavanceerde details</summary>
 
-- Add webhook-based notifications for operational observability.
-- Pair health metrics with proactive cleanup thresholds.
-- Use staged rollout of optional protocols to simplify troubleshooting.
+- Voeg webhook-gebaseerde notificaties toe voor operationele observability via Discord.
+- Koppel gezondheidsmetrics aan proactieve cleanup-drempels.
+- Gebruik gefaseerde uitrol van optionele protocols om troubleshooting te vereenvoudigen.
 
 </details>
 
-## Navigation
+## Navigatie
 
-- [Back to Intro](./intro)
+- [Terug naar Intro](./intro)
 
-## Related Pages
+## Gerelateerde pagina's
 
 - [Architecture](./architecture)
 - [Storage Layer](./storage-layer)
 - [Access Layer](./access-layer)
 - [Configuration](./configuration)
+- [Virtualisatiegids](./virtualisatie)

@@ -1,13 +1,13 @@
-﻿---
+---
 id: storage-layer
 title: Storage Layer
 ---
 
 # Storage Layer
 
-The storage layer aggregates multiple physical disks and exposes a unified virtual namespace.
+De storage layer aggregeert meerdere fysieke schijven en stelt één unified virtuele namespace beschikbaar.
 
-## Aggregation And VFS
+## Aggregatie en VFS
 
 ```mermaid
 flowchart TB
@@ -40,29 +40,30 @@ flowchart TB
   class AGG,PHYS,VFS storage;
 ```
 
-## Components
+## Componenten
 
-- Disk Aggregation: normalizes disk pool behavior across independent devices.
-- Physical Disks: hold full files; no striping across disks.
-- Virtual Filesystem (VFS): provides one logical directory namespace.
-- Path Mapping: maps virtual paths to physical locations.
-- Metadata Handling: caches access metadata for faster resolution.
-- Collision Resolver: prevents filename conflicts deterministically.
+- **Disk Aggregation:** normaliseert schijfpoolgedrag over onafhankelijke apparaten.
+- **Physical Disks:** bevatten volledige bestanden — geen striping over schijven.
+- **Virtual Filesystem (VFS):** biedt één logische directorynamespace voor alle protocols.
+- **Path Mapping:** mapt virtuele paden naar fysieke locaties.
+- **Metadata Handling:** cachet toegangsmetadata voor snellere resolutie (TTL: 2 seconden).
+- **Collision Resolver:** voorkomt bestandsnaamconflicten deterministisch via hash-gebaseerde hernoeming.
 
 <details>
-<summary>Advanced details</summary>
+<summary>Geavanceerde details</summary>
 
-- Path traversal protections defend against unsafe path construction.
-- Degraded mode continues serving healthy disks during partial failure.
-- Reintegration can restore full pool visibility after disk recovery.
+- Path traversal-protecties verdedigen tegen onveilige padconstructie.
+- Gedegradeerde modus blijft gezonde schijven bedienen tijdens gedeeltelijke uitval.
+- Herintegration kan volledige poolzichtbaarheid herstellen na schijfherstel.
+- De VFS-cache wordt automatisch ongeldig gemaakt na bestandsoperaties.
 
 </details>
 
-## Navigation
+## Navigatie
 
-- [Back to Intro](./intro)
+- [Terug naar Intro](./intro)
 
-## Related Pages
+## Gerelateerde pagina's
 
 - [Architecture](./architecture)
 - [Access Layer](./access-layer)
