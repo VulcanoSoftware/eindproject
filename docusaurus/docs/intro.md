@@ -15,12 +15,11 @@ MultiDisk FileBalancer is a software-defined storage orchestration platform that
 ```mermaid
 flowchart LR
   subgraph Frontend
-    UI[Dashboard + Config UI]
-    FM[File Manager]
+    CLI[Command-Line Interface]
+    CFG[config.yml]
   end
 
   subgraph Backend
-    API[API + Session Layer]
     CORE[Scheduler + Services]
     PIPE[Processing Pipeline]
   end
@@ -31,16 +30,16 @@ flowchart LR
     ACCESS[FUSE/SFTP/WebDAV/NFS]
   end
 
-  UI --> API
-  FM --> API
-  API --> CORE --> PIPE --> AGG --> VFS --> ACCESS
+  CLI --> CORE
+  CFG --> CORE
+  CORE --> PIPE --> AGG --> VFS --> ACCESS
 
   classDef frontend fill:#dbeafe,stroke:#1d4ed8,color:#0f172a,stroke-width:1px;
   classDef backend fill:#dcfce7,stroke:#15803d,color:#0f172a,stroke-width:1px;
   classDef storage fill:#ffedd5,stroke:#c2410c,color:#0f172a,stroke-width:1px;
 
-  class UI,FM frontend;
-  class API,CORE,PIPE backend;
+  class CLI,CFG frontend;
+  class CORE,PIPE backend;
   class AGG,VFS,ACCESS storage;
 ```
 
@@ -66,8 +65,8 @@ flowchart LR
 
 ## Components Overview
 
-- **Frontend:** Dashboard, configuration interface, file manager, observability views.
-- **Backend:** API, authentication/session flow, scheduler, disk monitor, recovery, pipeline logic.
+- **Frontend:** Command-line interface and `config.yml` configuration file.
+- **Backend:** Scheduler, disk monitor, recovery, pipeline logic, and protocol auth.
 - **Storage:** Aggregation layer, physical disks, metadata mapping, VFS, access protocols.
 
 ## Related Pages

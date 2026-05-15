@@ -12,7 +12,7 @@ Core services coordinate scheduling, health, and system safety before and during
 ```mermaid
 flowchart LR
   subgraph Frontend
-    OPS[Operator Triggers]
+    OPS[Operator / config.yml]
   end
 
   subgraph Backend
@@ -42,7 +42,7 @@ flowchart LR
 
 ## Components
 
-- **Config Loader:** validates startup configuration and service toggles. Launches an interactive setup wizard when no `config.yml` is present.
+- **Config Loader:** reads and validates `config.yml` on startup. When no `config.yml` is present, launches an interactive CLI wizard to collect settings and writes the file.
 - **Scheduler:** orchestrates recurring scan and maintenance cycles based on `scan_interval_seconds`.
 - **Disk Monitor:** tracks free space, availability, and health indicators.
 - **Recovery Engine:** supports degraded operation and reintegration after disk recovery.

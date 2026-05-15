@@ -136,7 +136,7 @@ nfs_server:
 
 | Option | Description |
 |---|---|
-| `src_folders` | Input roots scanned for candidate files. |
+| `src_folders` | Input roots scanned for candidate files. Supports multiple paths as a list. The legacy single-path key `src:` is also accepted for backwards compatibility. |
 | `disks` | Target storage devices in the pool (name + path). |
 | `last_disk` | Last used disk — automatically tracked by the program. |
 | `webhook_url` | Discord webhook URL for notifications. Leave empty to disable. |

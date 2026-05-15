@@ -18,35 +18,31 @@ flowchart LR
   subgraph Backend
     SCAN[File Scanner]
     FILT[Filter Engine]
-    QUEUE[Priority Queue]
     PICK[Disk Selection]
     MOVE[File Mover]
-    VALID[Integrity Validator]
   end
 
   subgraph Storage
     TARGET[Selected Disk Path]
   end
 
-  RULES --> SCAN --> FILT --> QUEUE --> PICK --> MOVE --> VALID --> TARGET
+  RULES --> SCAN --> FILT --> PICK --> MOVE --> TARGET
 
   classDef frontend fill:#dbeafe,stroke:#1d4ed8,color:#0f172a,stroke-width:1px;
   classDef backend fill:#dcfce7,stroke:#15803d,color:#0f172a,stroke-width:1px;
   classDef storage fill:#ffedd5,stroke:#c2410c,color:#0f172a,stroke-width:1px;
 
   class RULES frontend;
-  class SCAN,FILT,QUEUE,PICK,MOVE,VALID backend;
+  class SCAN,FILT,PICK,MOVE backend;
   class TARGET storage;
 ```
 
 ## Components
 
 - **File Scanner:** recursively discovers candidate files in the configured `src_folders`.
-- **Filter Engine:** applies age checks, exclusions, lock checks, and stability checks. A file is skipped if it is too young (`min_file_age_hours`), in use, or actively changing.
-- **Priority Queue:** orders candidate work for predictable throughput.
+- **Filter Engine:** applies age checks, lock checks, and stability checks. A file is skipped if it is too young (`min_file_age_hours`), in use, or actively changing.
 - **Disk Selection Logic:** round-robin plus safety-space and eligibility controls. A disk is skipped if free space falls below `extra_safety_space_gb`.
-- **File Mover:** performs transfer with collision-safe naming (automatic rename on conflict).
-- **Validation:** confirms move integrity and consistency before completion.
+- **File Mover:** performs transfer using `shutil.move` with collision-safe naming (automatic hash-based rename on conflict).
 
 ## Space Hunter (Cleanup Automation)
 

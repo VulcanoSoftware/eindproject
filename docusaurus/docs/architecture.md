@@ -12,12 +12,11 @@ The architecture is intentionally split into Frontend, Backend, and Storage to k
 ```mermaid
 flowchart TB
   subgraph Frontend
-    UI[Dashboard + Config + Stats]
-    UX[Operator Actions]
+    CLI[Command-Line Interface]
+    CFG[config.yml]
   end
 
   subgraph Backend
-    API[API + Auth + Sessions]
     CORE[Core Services]
     PROC[File Processing]
   end
@@ -28,21 +27,23 @@ flowchart TB
     PROTO[Access Protocols]
   end
 
-  UX --> UI --> API --> CORE --> PROC --> AGG --> VFS --> PROTO
+  CLI --> CORE
+  CFG --> CORE
+  CORE --> PROC --> AGG --> VFS --> PROTO
 
   classDef frontend fill:#dbeafe,stroke:#1d4ed8,color:#0f172a,stroke-width:1px;
   classDef backend fill:#dcfce7,stroke:#15803d,color:#0f172a,stroke-width:1px;
   classDef storage fill:#ffedd5,stroke:#c2410c,color:#0f172a,stroke-width:1px;
 
-  class UI,UX frontend;
-  class API,CORE,PROC backend;
+  class CLI,CFG frontend;
+  class CORE,PROC backend;
   class AGG,VFS,PROTO storage;
 ```
 
 ## Component Boundaries
 
-- **Frontend** handles user interaction and operational visibility.
-- **Backend** handles orchestration, policy decisions, integrity, and recovery.
+- **Frontend** handles operator interaction: the CLI startup flow and `config.yml` configuration.
+- **Backend** handles orchestration, policy decisions, cleanup, and recovery.
 - **Storage** handles placement, namespace unification, metadata, and protocol serving.
 
 <details>
