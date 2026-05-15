@@ -4,7 +4,7 @@ A software-defined storage orchestration tool that distributes files across mult
 
 Inspired by RAID 0 — but safer, more flexible, and fully software-based.
 
-📚 **Full documentation:** [eindproject.vercel.app](https://eindproject.vercel.app)
+📚 **Full documentation:** [https://multidisk-filebalancer-docs.vercel.app/](https://multidisk-filebalancer-docs.vercel.app/)
 
 ---
 
@@ -13,7 +13,7 @@ Inspired by RAID 0 — but safer, more flexible, and fully software-based.
 - **Linux only** — Windows and macOS are not supported.
 - **WSL is not supported** — run the program inside a native Linux VM (e.g. Debian in VirtualBox).
 - Root/sudo privileges are required for FUSE mounting and NFS.
-- See the [Virtualisation Guide](https://eindproject.vercel.app/virtualisation) for a step-by-step VM setup.
+- See the [Virtualisation Guide](https://multidisk-filebalancer-docs.vercel.app/virtualization/) for a step-by-step VM setup.
 
 ---
 
