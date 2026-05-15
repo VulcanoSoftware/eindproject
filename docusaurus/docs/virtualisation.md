@@ -60,11 +60,11 @@ This guide walks you through running MultiDisk FileBalancer on Windows using a D
 
 ![Step 11](/img/virtualisatie/image11.png)
 
-## Step 12 — Click Next
+## Step 12 — Click Yes
 
 ![Step 12](/img/virtualisatie/image12.png)
 
-## Step 13 — Click Next
+## Step 13 — Click Yes
 
 ![Step 13](/img/virtualisatie/image13.png)
 
