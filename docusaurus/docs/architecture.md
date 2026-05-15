@@ -1,13 +1,13 @@
----
+﻿---
 id: architecture
 title: Architecture
 ---
 
 # Architecture
 
-De architectuur is bewust opgesplitst in Frontend, Backend en Storage om verantwoordelijkheden duidelijk en schaalbaar te houden.
+The architecture is intentionally split into Frontend, Backend, and Storage to keep responsibilities clear and scalable.
 
-## Gelaagde architectuur
+## Layered Architecture
 
 ```mermaid
 flowchart TB
@@ -39,27 +39,26 @@ flowchart TB
   class AGG,VFS,PROTO storage;
 ```
 
-## Component grenzen
+## Component Boundaries
 
-- **Frontend** behandelt gebruikersinteractie en operationele zichtbaarheid.
-- **Backend** behandelt orchestratie, beleidsbeslissingen, integriteit en herstel.
-- **Storage** behandelt plaatsing, namespace-unificatie, metadata en protocol-serving.
+- Frontend handles user interaction and operational visibility.
+- Backend handles orchestration, policy decisions, integrity, and recovery.
+- Storage handles placement, namespace unification, metadata, and protocol serving.
 
 <details>
-<summary>Geavanceerde details</summary>
+<summary>Advanced details</summary>
 
-- Monitoring- en notificatiepaden (inclusief Discord webhooks) zijn gekoppeld aan backend- en pipeline-events.
-- Backup/redundantie-workflows integreren met schijfselectie en herstellussen.
-- Het ontwerp ondersteunt optionele services zonder de kernbalanceringsloop te wijzigen.
-- NFS-service vereist Docker Engine op de host voor containerisatie van de NFS-daemon.
+- Monitoring and notification paths are attached to backend and pipeline events.
+- Backup/redundancy workflows integrate with disk selection and recovery loops.
+- Design supports optional services without changing the core balancing loop.
 
 </details>
 
-## Navigatie
+## Navigation
 
-- [Terug naar Intro](./intro)
+- [Back to Intro](./intro)
 
-## Gerelateerde pagina's
+## Related Pages
 
 - [Core Services](./core-services)
 - [Processing Pipeline](./processing-pipeline)

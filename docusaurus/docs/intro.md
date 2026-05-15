@@ -1,4 +1,4 @@
----
+﻿---
 id: intro
 title: Intro
 slug: /
@@ -6,11 +6,9 @@ slug: /
 
 # MultiDisk FileBalancer
 
-MultiDisk FileBalancer is een software-defined storage orchestration platform dat bestanden verdeelt over meerdere schijven en tegelijkertijd één unified filesystem-weergave aanbiedt.
+MultiDisk FileBalancer is a software-defined storage orchestration platform that distributes files across multiple disks while exposing one unified filesystem view.
 
-> **Vereiste:** Het programma draait uitsluitend op Linux. Windows wordt niet ondersteund — ook WSL niet. Gebruik een Linux VM (bijv. Debian in VirtualBox). Zie de [Virtualisatiegids](./virtualisatie) voor een stap-voor-stap installatie.
-
-## Systeem in één oogopslag
+## System At A Glance
 
 ```mermaid
 flowchart LR
@@ -28,7 +26,7 @@ flowchart LR
   subgraph Storage
     AGG[Disk Aggregation]
     VFS[Virtual Filesystem]
-    ACCESS[FUSE/SFTP/WebDAV/NFS]
+    ACCESS[FUSE/SFTP/WebDAV/S3]
   end
 
   UI --> API
@@ -44,33 +42,30 @@ flowchart LR
   class AGG,VFS,ACCESS storage;
 ```
 
-## Wat dit systeem oplost
+## What This System Solves
 
-- Multi-disk balancing zonder RAID-striping risico.
-- Failure isolation: één defecte schijf raakt alleen de bestanden op die schijf.
-- Unified namespace via virtual filesystem abstractie.
-- Multi-protocol toegang voor lokale en remote clients (FUSE, SFTP, WebDAV, NFS).
-- Achtergrond veiligheidschecks en operationele controles.
-- Automatische schijfruimte-bewaking en cleanup via Space Hunter.
-- Discord-notificaties voor operationele events en waarschuwingen.
+- Multi-disk balancing without RAID striping risk.
+- Failure isolation: one failed disk only impacts files stored on that disk.
+- Unified namespace via virtual filesystem abstraction.
+- Multi-protocol access for local and remote clients.
+- Background safety and operational checks.
 
 <details>
-<summary>Geavanceerde details</summary>
+<summary>Advanced details</summary>
 
-- Startup preflight controleert OS, Python, rechten, dependencies en FUSE-gereedheid.
-- Optionele ondersteunende services zijn: reverse workflows, cleanup-automatisering, monitoring en notificaties.
-- Het ontwerp legt de nadruk op modulaire groei en veiliger uitbreiden boven strakke RAID-koppeling.
-- NFS wordt aangeboden via een Docker-container (vereist Docker Engine op de host).
+- Startup preflight checks OS, Python, privileges, dependencies, and FUSE readiness.
+- Optional support services include reverse workflows, cleanup automation, monitoring, and notifications.
+- Design emphasizes modular growth and safer expansion over tight RAID coupling.
 
 </details>
 
-## Componentenoverzicht
+## Components Overview
 
-- **Frontend:** Dashboard, configuratie-interface, file manager, observability views.
-- **Backend:** API, authenticatie/sessie-flow, scheduler, disk monitor, recovery, pipeline-logica.
-- **Storage:** Aggregatielaag, fysieke schijven, metadata-mapping, VFS, toegangsprotocollen.
+- Frontend: Dashboard, configuration interface, file manager, observability views.
+- Backend: API, authentication/session flow, scheduler, disk monitor, recovery, pipeline logic.
+- Storage: Aggregation layer, physical disks, metadata mapping, VFS, access protocols.
 
-## Gerelateerde pagina's
+## Related Pages
 
 - [Architecture](./architecture)
 - [Core Services](./core-services)
@@ -79,4 +74,3 @@ flowchart LR
 - [Access Layer](./access-layer)
 - [Configuration](./configuration)
 - [Use Cases](./use-cases)
-- [Virtualisatiegids](./virtualisatie)
