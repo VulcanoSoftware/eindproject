@@ -148,11 +148,11 @@ Allocate at least **20 GB** of disk space.
 
 ![Step 32](/img/virtualisatie/image32.png)
 
-## Step 33 — Click Continue (confirm root password)
+## Step 33 — Click Continue (full name for user)
 
 ![Step 33](/img/virtualisatie/image33.png)
 
-## Step 34 — Click Continue (full name for user)
+## Step 34 — Click Continue (username for user)
 
 ![Step 34](/img/virtualisatie/image34.png)
 
@@ -160,23 +160,23 @@ Allocate at least **20 GB** of disk space.
 
 ![Step 35](/img/virtualisatie/image35.png)
 
-## Step 36 — Click Continue (confirm user password)
+## Step 36 — Click Continue (timezone)
 
 ![Step 36](/img/virtualisatie/image36.png)
 
-## Step 37 — Click Continue (timezone)
+## Step 37 — Click Continue (disk partitioning — use entire disk)
 
 ![Step 37](/img/virtualisatie/image37.png)
 
-## Step 38 — Click Continue (disk partitioning — use entire disk)
+## Step 38 — Click Continue (select disk to partition))
 
 ![Step 38](/img/virtualisatie/image38.png)
 
-## Step 39 — Click Continue (select disk to partition)
+## Step 39 — Click Continue (partitioning scheme)
 
 ![Step 39](/img/virtualisatie/image39.png)
 
-## Step 40 — Click Continue (partitioning scheme)
+## Step 40 — Click Continue (write changes to disk)
 
 ![Step 40](/img/virtualisatie/image40.png)
 
@@ -206,11 +206,11 @@ Allocate at least **20 GB** of disk space.
 
 ## Step 47 — Check and uncheck items to match the following software selection
 
-Make sure **SSH server** and **Standard system utilities** are checked. Select a desktop environment of your choice (e.g. GNOME).
+Make sure **SSH server** and **Standard system utilities** are checked. Select a desktop environment of your choice (e.g. KDE Plasma).
 
 ![Step 47](/img/virtualisatie/image47.png)
 
-## Step 48 — Click Continue (software selection)
+## Step 48 — Click Continue (install GRUB)
 
 ![Step 48](/img/virtualisatie/image48.png)
 
@@ -356,7 +356,7 @@ sudo reboot
 
 ![Step 75](/img/virtualisatie/image75.png)
 
-### Step 76 — Open the program folder (shared folder)
+### Step 76 — Give yourself permission to the shared folder (next step)
 
 ![Step 76](/img/virtualisatie/image76.png)
 
