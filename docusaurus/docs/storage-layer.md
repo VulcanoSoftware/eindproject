@@ -1,4 +1,4 @@
-﻿---
+---
 id: storage-layer
 title: Storage Layer
 ---
@@ -42,12 +42,12 @@ flowchart TB
 
 ## Components
 
-- Disk Aggregation: normalizes disk pool behavior across independent devices.
-- Physical Disks: hold full files; no striping across disks.
-- Virtual Filesystem (VFS): provides one logical directory namespace.
-- Path Mapping: maps virtual paths to physical locations.
-- Metadata Handling: caches access metadata for faster resolution.
-- Collision Resolver: prevents filename conflicts deterministically.
+- **Disk Aggregation:** normalizes disk pool behaviour across independent devices.
+- **Physical Disks:** hold full files — no striping across disks.
+- **Virtual Filesystem (VFS):** provides one logical directory namespace across all protocols.
+- **Path Mapping:** maps virtual paths to physical locations.
+- **Metadata Handling:** caches access metadata for faster resolution (TTL: 2 seconds).
+- **Collision Resolver:** prevents filename conflicts deterministically via hash-based renaming.
 
 <details>
 <summary>Advanced details</summary>
@@ -55,6 +55,7 @@ flowchart TB
 - Path traversal protections defend against unsafe path construction.
 - Degraded mode continues serving healthy disks during partial failure.
 - Reintegration can restore full pool visibility after disk recovery.
+- The VFS cache is automatically invalidated after file operations.
 
 </details>
 

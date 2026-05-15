@@ -1,4 +1,4 @@
-﻿---
+---
 id: intro
 title: Intro
 slug: /
@@ -7,6 +7,8 @@ slug: /
 # MultiDisk FileBalancer
 
 MultiDisk FileBalancer is a software-defined storage orchestration platform that distributes files across multiple disks while exposing one unified filesystem view.
+
+> **Requirement:** The program runs on Linux only. Windows is not supported — including WSL. Use a Linux VM (e.g. Debian in VirtualBox). See the [Virtualisation Guide](./virtualisation) for a step-by-step setup.
 
 ## System At A Glance
 
@@ -26,7 +28,7 @@ flowchart LR
   subgraph Storage
     AGG[Disk Aggregation]
     VFS[Virtual Filesystem]
-    ACCESS[FUSE/SFTP/WebDAV/S3]
+    ACCESS[FUSE/SFTP/WebDAV/NFS]
   end
 
   UI --> API
@@ -47,8 +49,10 @@ flowchart LR
 - Multi-disk balancing without RAID striping risk.
 - Failure isolation: one failed disk only impacts files stored on that disk.
 - Unified namespace via virtual filesystem abstraction.
-- Multi-protocol access for local and remote clients.
+- Multi-protocol access for local and remote clients (FUSE, SFTP, WebDAV, NFS).
 - Background safety and operational checks.
+- Automatic disk space monitoring and cleanup via Space Hunter.
+- Discord notifications for operational events and warnings.
 
 <details>
 <summary>Advanced details</summary>
@@ -56,14 +60,15 @@ flowchart LR
 - Startup preflight checks OS, Python, privileges, dependencies, and FUSE readiness.
 - Optional support services include reverse workflows, cleanup automation, monitoring, and notifications.
 - Design emphasizes modular growth and safer expansion over tight RAID coupling.
+- NFS is served via a Docker container and requires Docker Engine on the host.
 
 </details>
 
 ## Components Overview
 
-- Frontend: Dashboard, configuration interface, file manager, observability views.
-- Backend: API, authentication/session flow, scheduler, disk monitor, recovery, pipeline logic.
-- Storage: Aggregation layer, physical disks, metadata mapping, VFS, access protocols.
+- **Frontend:** Dashboard, configuration interface, file manager, observability views.
+- **Backend:** API, authentication/session flow, scheduler, disk monitor, recovery, pipeline logic.
+- **Storage:** Aggregation layer, physical disks, metadata mapping, VFS, access protocols.
 
 ## Related Pages
 
@@ -74,3 +79,4 @@ flowchart LR
 - [Access Layer](./access-layer)
 - [Configuration](./configuration)
 - [Use Cases](./use-cases)
+- [Virtualisation Guide](./virtualisation)

@@ -1,4 +1,4 @@
-﻿---
+---
 id: use-cases
 title: Use Cases
 ---
@@ -23,7 +23,7 @@ flowchart LR
 
   subgraph Storage
     POOL[Disk Pool + VFS]
-    ACCESS[FUSE/SFTP/WebDAV/S3]
+    ACCESS[FUSE/SFTP/WebDAV/NFS]
   end
 
   TEAM --> ORCH --> POOL --> ACCESS --> APPS
@@ -40,22 +40,24 @@ flowchart LR
 
 ## Real-Life Examples
 
-- Automated backup server: ingest backup outputs, age-gate transfers, and protect free space with cleanup rules.
-- Media archive platform: unify multiple disks under one namespace and serve remote reads over SFTP/WebDAV.
-- Home or SMB NAS: expand storage incrementally without RAID striping constraints.
-- Data ingestion pipeline: collect files rapidly, prioritize queue execution, and validate post-move integrity.
-- Migration and reprocessing: use reverse workflows to bring files back to central processing stages.
+- **Automated backup server:** ingest backup outputs, age-gate transfers, and protect free space with cleanup rules.
+- **Media archive platform:** unify multiple disks under one namespace and serve remote reads over SFTP or WebDAV.
+- **Home or SMB NAS:** expand storage incrementally without RAID striping constraints.
+- **Data ingestion pipeline:** collect files rapidly, prioritize queue execution, and validate post-move integrity.
+- **Migration and reprocessing:** use reverse workflows to bring files back to central processing stages.
+- **Linux VM environment:** run the program inside a Debian VM on VirtualBox with shared folders as the disk pool — see the [Virtualisation Guide](./virtualisation).
 
 ## Practical Scenarios
 
-- Disk failure handling: continue operations on healthy disks with isolated impact.
-- Bursty workloads: tune queueing and scan intervals for predictable throughput.
-- Mixed protocol clients: expose one VFS to local mounts and object-compatible tooling.
+- **Disk failure handling:** continue operations on healthy disks with isolated impact.
+- **Bursty workloads:** tune queueing and scan intervals for predictable throughput.
+- **Mixed protocol clients:** expose one VFS to local mounts and NFS clients simultaneously.
+- **Automatic cleanup:** configure Space Hunter to delete or move the oldest files once free space hits a threshold.
 
 <details>
 <summary>Advanced details</summary>
 
-- Add webhook-based notifications for operational observability.
+- Add webhook-based Discord notifications for operational observability.
 - Pair health metrics with proactive cleanup thresholds.
 - Use staged rollout of optional protocols to simplify troubleshooting.
 
@@ -71,3 +73,4 @@ flowchart LR
 - [Storage Layer](./storage-layer)
 - [Access Layer](./access-layer)
 - [Configuration](./configuration)
+- [Virtualisation Guide](./virtualisation)

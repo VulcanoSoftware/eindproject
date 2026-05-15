@@ -1,4 +1,4 @@
-﻿---
+---
 id: architecture
 title: Architecture
 ---
@@ -41,16 +41,17 @@ flowchart TB
 
 ## Component Boundaries
 
-- Frontend handles user interaction and operational visibility.
-- Backend handles orchestration, policy decisions, integrity, and recovery.
-- Storage handles placement, namespace unification, metadata, and protocol serving.
+- **Frontend** handles user interaction and operational visibility.
+- **Backend** handles orchestration, policy decisions, integrity, and recovery.
+- **Storage** handles placement, namespace unification, metadata, and protocol serving.
 
 <details>
 <summary>Advanced details</summary>
 
-- Monitoring and notification paths are attached to backend and pipeline events.
+- Monitoring and notification paths (including Discord webhooks) are attached to backend and pipeline events.
 - Backup/redundancy workflows integrate with disk selection and recovery loops.
 - Design supports optional services without changing the core balancing loop.
+- The NFS service requires Docker Engine on the host for containerisation of the NFS daemon.
 
 </details>
 
