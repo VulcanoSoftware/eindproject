@@ -39,8 +39,8 @@ flowchart LR
 
 ## Components
 
-- **File Scanner:** recursively discovers candidate files in the configured `src_folders`.
-- **Filter Engine:** applies age checks, lock checks, and stability checks. A file is skipped if it is too young (`min_file_age_hours`), in use, or actively changing.
+- **File Scanner:** recursively discovers candidate files in the configured `src_folders`. Symlinks are skipped.
+- **Filter Engine:** applies a minimum age check (`min_file_age_hours`). Files that are too young are skipped and logged.
 - **Disk Selection Logic:** round-robin plus safety-space and eligibility controls. A disk is skipped if free space falls below `extra_safety_space_gb`.
 - **File Mover:** performs transfer using `shutil.move` with collision-safe naming (automatic hash-based rename on conflict).
 
@@ -48,9 +48,12 @@ flowchart LR
 
 Space Hunter runs in parallel with the standard pipeline and monitors configured disks for free space. When a disk falls below the `min_free_gb` threshold:
 
-1. The oldest unlocked, stable file is found.
-2. Depending on `action`: the file is deleted or moved to `move_destination`.
-3. The action is logged (and reported via Discord if configured).
+1. The oldest file is found recursively (symlinks are skipped).
+2. Lock and stability checks are applied: locked or actively-changing files are skipped (up to `max_rescans` attempts).
+3. Depending on `action`: the file is deleted or moved to `move_destination`.
+4. The action is logged (and reported via Discord if configured).
+
+Each disk entry in `space_hunter_disks` can override `exclude_folders`, `min_file_age_hours`, `dry_run`, and `max_actions_per_cycle` independently of the global settings.
 
 Use `space_hunter_dry_run: true` to simulate behaviour without making any actual changes.
 

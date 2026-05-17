@@ -60,7 +60,7 @@ flowchart LR
 - Startup preflight checks OS, Python, privileges, dependencies, and FUSE readiness.
 - Optional support services include reverse workflows, cleanup automation, monitoring, and notifications.
 - Design emphasizes modular growth and safer expansion over tight RAID coupling.
-- NFS is served via a Docker container and requires Docker Engine on the host.
+- NFS is served via the Linux kernel NFS server (`nfs-kernel-server`), installed automatically if missing. Requires root or sudo.
 
 </details>
 

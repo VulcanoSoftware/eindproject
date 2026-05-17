@@ -77,7 +77,7 @@ Leave `webhook_url` empty or omit it to disable notifications.
 - Startup preflight can gate service enablement based on dependency readiness.
 - Recovery integrates with validation outcomes and disk health telemetry.
 - Notifications post to a single Discord webhook; a Discord bot can be used as a relay for multiple channels.
-- The NFS service requires Docker Engine; if Docker is not found, the NFS server will not start and an error is shown.
+- The NFS service uses the Linux kernel NFS server (`nfs-kernel-server`), installed automatically if missing. It requires root or sudo to write export entries and reload `exportfs`.
 
 </details>
 

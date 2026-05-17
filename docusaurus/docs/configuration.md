@@ -120,7 +120,7 @@ sftp_server:
   upload_src: "/media/sf_MultiDisk-FileBalancer/src"
   use_fuse_mount_as_root: true
 
-# NFS server (requires Docker on the host)
+# NFS server (requires root or sudo — uses Linux kernel nfs-kernel-server)
 nfs_server:
   enabled: false
   host: "0.0.0.0"
@@ -169,6 +169,10 @@ nfs_server:
 | `min_free_gb` | Free space threshold below which cleanup activates. |
 | `path` | Path of the disk to monitor. |
 | `move_destination` | Destination path when `action: move`. |
+| `min_file_age_hours` | *(optional)* Per-disk override for minimum file age. Falls back to the global `space_hunter_min_file_age_hours`. |
+| `exclude_folders` | *(optional)* Per-disk list of folders excluded from cleanup. Falls back to the global `space_hunter_exclude_folders`. |
+| `dry_run` | *(optional)* Per-disk dry-run override. Falls back to the global `space_hunter_dry_run`. |
+| `max_actions_per_cycle` | *(optional)* Per-disk action limit per cycle. Falls back to the global `space_hunter_max_actions_per_cycle`. |
 
 ### Reverse Raid
 
@@ -189,8 +193,9 @@ Each server has at minimum `enabled`, `host`, `port`, `username`, and `password`
 | `upload_src` | Source folder for uploads via this protocol. |
 | `use_fuse_mount_as_root` | `true` = serve the FUSE mount point as root instead of `upload_src`. |
 | `nfs_server.permitted` | IP pattern of allowed NFS clients (e.g. `*` or `192.168.1.*`). |
+| `sftp_server.host_key_path` | *(optional)* Path to an existing SSH host key file. If omitted, an Ed25519 and RSA key are generated automatically in memory on each start. |
 
-> **Note:** The NFS server requires Docker on the host. Without Docker, the NFS server cannot start.
+> **Note:** The NFS server uses the Linux kernel NFS daemon (`nfs-kernel-server`). The program installs it automatically if missing, but requires root or sudo to write to `/etc/exports.d/` and reload `exportfs`. Custom ports are not supported — NFS always uses port `2049`.
 
 > **Note:** The S3-compatible server (`s3_server`) found in older config files has been removed from the program and is ignored.
 
