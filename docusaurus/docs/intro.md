@@ -17,6 +17,7 @@ flowchart LR
   subgraph Frontend
     UI[Dashboard + Config UI]
     FM[File Manager]
+    WP[Web Panel]
   end
 
   subgraph Backend
@@ -28,18 +29,19 @@ flowchart LR
   subgraph Storage
     AGG[Disk Aggregation]
     VFS[Virtual Filesystem]
-    ACCESS[FUSE/SFTP/WebDAV/NFS]
+    ACCESS[FUSE / SFTP / WebDAV / NFS]
   end
 
   UI --> API
   FM --> API
+  WP --> API
   API --> CORE --> PIPE --> AGG --> VFS --> ACCESS
 
   classDef frontend fill:#dbeafe,stroke:#1d4ed8,color:#0f172a,stroke-width:1px;
   classDef backend fill:#dcfce7,stroke:#15803d,color:#0f172a,stroke-width:1px;
   classDef storage fill:#ffedd5,stroke:#c2410c,color:#0f172a,stroke-width:1px;
 
-  class UI,FM frontend;
+  class UI,FM,WP frontend;
   class API,CORE,PIPE backend;
   class AGG,VFS,ACCESS storage;
 ```
@@ -53,6 +55,7 @@ flowchart LR
 - Background safety and operational checks.
 - Automatic disk space monitoring and cleanup via Space Hunter.
 - Discord notifications for operational events and warnings.
+- Built-in web panel for real-time dashboard and configuration (Flask, default port `5000`).
 
 <details>
 <summary>Advanced details</summary>
@@ -61,12 +64,13 @@ flowchart LR
 - Optional support services include reverse workflows, cleanup automation, monitoring, and notifications.
 - Design emphasizes modular growth and safer expansion over tight RAID coupling.
 - NFS is served via the Linux kernel NFS server (`nfs-kernel-server`), installed automatically if missing. Requires root or sudo.
+- The Web Panel serves live stats via `/api/stats` and config via `/api/config`. It is enabled by default on port `5000`.
 
 </details>
 
 ## Components Overview
 
-- **Frontend:** Dashboard, configuration interface, file manager, observability views.
+- **Frontend:** Dashboard, configuration interface, file manager, web panel, observability views.
 - **Backend:** API, authentication/session flow, scheduler, disk monitor, recovery, pipeline logic.
 - **Storage:** Aggregation layer, physical disks, metadata mapping, VFS, access protocols.
 

@@ -13,6 +13,7 @@ Core services coordinate scheduling, health, and system safety before and during
 flowchart LR
   subgraph Frontend
     OPS[Operator Triggers]
+    WP[Web Panel — Flask]
   end
 
   subgraph Backend
@@ -28,6 +29,7 @@ flowchart LR
   end
 
   OPS --> CFG --> SCH --> MON --> REC --> NOTIF
+  WP --> CFG
   MON --> STATE
   REC --> STATE
 
@@ -35,7 +37,7 @@ flowchart LR
   classDef backend fill:#dcfce7,stroke:#15803d,color:#0f172a,stroke-width:1px;
   classDef storage fill:#ffedd5,stroke:#c2410c,color:#0f172a,stroke-width:1px;
 
-  class OPS frontend;
+  class OPS,WP frontend;
   class CFG,SCH,MON,REC,NOTIF backend;
   class STATE storage;
 ```
@@ -47,6 +49,7 @@ flowchart LR
 - **Disk Monitor:** tracks free space, availability, and health indicators.
 - **Recovery Engine:** supports degraded operation and reintegration after disk recovery.
 - **Notifications:** emits operational events and warnings via Discord webhook or console output.
+- **Web Panel:** Flask-based dashboard (default port `5000`) that reads live stats and config at runtime.
 
 ## Startup Preflight
 
@@ -55,7 +58,7 @@ On every start the program runs a preflight check that reports:
 - OS and Python version
 - Admin/root privileges
 - FUSE availability and mount point
-- Enabled services (FUSE, WebDAV, SFTP, NFS)
+- Enabled services (FUSE, WebDAV, SFTP, NFS, Web Panel)
 - Installation advice for missing dependencies
 
 This output appears both in the console and via the Discord webhook (if configured).
@@ -78,6 +81,7 @@ Leave `webhook_url` empty or omit it to disable notifications.
 - Recovery integrates with validation outcomes and disk health telemetry.
 - Notifications post to a single Discord webhook; a Discord bot can be used as a relay for multiple channels.
 - The NFS service uses the Linux kernel NFS server (`nfs-kernel-server`), installed automatically if missing. It requires root or sudo to write export entries and reload `exportfs`.
+- The Web Panel runs as a daemon thread and its Flask output is silenced by default to keep the console clean.
 
 </details>
 

@@ -13,6 +13,7 @@ The architecture is intentionally split into Frontend, Backend, and Storage to k
 flowchart TB
   subgraph Frontend
     UI[Dashboard + Config + Stats]
+    WP[Web Panel — Flask port 5000]
     UX[Operator Actions]
   end
 
@@ -28,20 +29,22 @@ flowchart TB
     PROTO[Access Protocols]
   end
 
-  UX --> UI --> API --> CORE --> PROC --> AGG --> VFS --> PROTO
+  UX --> UI --> API
+  UX --> WP --> API
+  API --> CORE --> PROC --> AGG --> VFS --> PROTO
 
   classDef frontend fill:#dbeafe,stroke:#1d4ed8,color:#0f172a,stroke-width:1px;
   classDef backend fill:#dcfce7,stroke:#15803d,color:#0f172a,stroke-width:1px;
   classDef storage fill:#ffedd5,stroke:#c2410c,color:#0f172a,stroke-width:1px;
 
-  class UI,UX frontend;
+  class UI,WP,UX frontend;
   class API,CORE,PROC backend;
   class AGG,VFS,PROTO storage;
 ```
 
 ## Component Boundaries
 
-- **Frontend** handles user interaction and operational visibility.
+- **Frontend** handles user interaction and operational visibility, including the built-in Flask web panel.
 - **Backend** handles orchestration, policy decisions, integrity, and recovery.
 - **Storage** handles placement, namespace unification, metadata, and protocol serving.
 
@@ -51,7 +54,8 @@ flowchart TB
 - Monitoring and notification paths (including Discord webhooks) are attached to backend and pipeline events.
 - Backup/redundancy workflows integrate with disk selection and recovery loops.
 - Design supports optional services without changing the core balancing loop.
-- The NFS service requires Docker Engine on the host for containerisation of the NFS daemon.
+- The NFS service uses the Linux kernel NFS server (`nfs-kernel-server`) — Docker is **not** required.
+- The Web Panel (Flask) runs as a daemon thread and exposes `/api/stats` and `/api/config` endpoints.
 
 </details>
 
@@ -64,3 +68,4 @@ flowchart TB
 - [Core Services](./core-services)
 - [Processing Pipeline](./processing-pipeline)
 - [Storage Layer](./storage-layer)
+- [Access Layer](./access-layer)

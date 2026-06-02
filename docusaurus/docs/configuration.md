@@ -5,7 +5,7 @@ title: Configuration
 
 # Configuration
 
-Configuration controls data sources, disk pool layout, runtime safety, and optional services.
+Configuration controls data sources, disk pool layout, runtime safety, optional services, and the built-in web panel.
 
 ## Configuration Scope
 
@@ -24,12 +24,14 @@ flowchart LR
     SRC[Source Folders]
     DISK[Disk Pool]
     SVC[Protocol Services]
+    WP[Web Panel]
   end
 
   ADMIN --> CFG --> POLICY
   POLICY --> SRC
   POLICY --> DISK
   POLICY --> SVC
+  POLICY --> WP
 
   classDef frontend fill:#dbeafe,stroke:#1d4ed8,color:#0f172a,stroke-width:1px;
   classDef backend fill:#dcfce7,stroke:#15803d,color:#0f172a,stroke-width:1px;
@@ -37,7 +39,7 @@ flowchart LR
 
   class ADMIN frontend;
   class CFG,POLICY backend;
-  class SRC,DISK,SVC storage;
+  class SRC,DISK,SVC,WP storage;
 ```
 
 ## Full `config.yml` Example
@@ -128,6 +130,12 @@ nfs_server:
   permitted: "*"
   upload_src: "/media/sf_MultiDisk-FileBalancer/src"
   use_fuse_mount_as_root: true
+
+# Web Panel (Flask dashboard — enabled by default)
+webpanel:
+  enabled: true
+  host: "0.0.0.0"
+  port: 5000
 ```
 
 ## Option Breakdown
@@ -195,6 +203,14 @@ Each server has at minimum `enabled`, `host`, `port`, `username`, and `password`
 | `nfs_server.permitted` | IP pattern of allowed NFS clients (e.g. `*` or `192.168.1.*`). |
 | `sftp_server.host_key_path` | *(optional)* Path to an existing SSH host key file. If omitted, an Ed25519 and RSA key are generated automatically in memory on each start. |
 
+### Web Panel
+
+| Option | Description |
+|---|---|
+| `webpanel.enabled` | Enable or disable the web panel. Default: `true`. |
+| `webpanel.host` | Host to bind the Flask server to. Default: `0.0.0.0`. |
+| `webpanel.port` | Port for the Flask web panel. Default: `5000`. |
+
 > **Note:** The NFS server uses the Linux kernel NFS daemon (`nfs-kernel-server`). The program installs it automatically if missing, but requires root or sudo to write to `/etc/exports.d/` and reload `exportfs`. Custom ports are not supported — NFS always uses port `2049`.
 
 > **Note:** The S3-compatible server (`s3_server`) found in older config files has been removed from the program and is ignored.
@@ -206,6 +222,7 @@ Each server has at minimum `enabled`, `host`, `port`, `username`, and `password`
 - Align `extra_safety_space_gb` with ingest burst profiles.
 - Keep ports and mount targets explicit to avoid runtime ambiguity.
 - When `use_fuse_mount_as_root: true`, FUSE must be enabled and running before the protocol server starts.
+- The Web Panel setup wizard prompts for host and port on first run.
 
 </details>
 
