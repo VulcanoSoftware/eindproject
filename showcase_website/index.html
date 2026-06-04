@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MultiDisk FileBalancer — Unified Multi-Disk Storage</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="badge">Linux-only • Production Ready</div>
+      
+      <h1>One unified filesystem.<br>
+      <span>Multiple physical disks.</span></h1>
+      
+      <p class="subtitle">
+        Safe, flexible multi-disk storage without RAID risks.<br>
+        Featuring FUSE, SFTP, WebDAV, NFS and a modern web dashboard.
+      </p>
+
+      <div class="cta-buttons">
+        <a href="https://github.com/VulcanoSoftware/MultiDiskFileBalancer" target="_blank" class="btn primary">
+          <i class="fab fa-github"></i> View on GitHub
+        </a>
+        <a href="https://multidisk-filebalancer-docs.vercel.app/" target="_blank" class="btn secondary">
+          📖 Full Documentation
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <h2>Powerful Features</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="icon">🔄</div>
+          <h3>Smart Balancing</h3>
+          <p>Automatic file distribution with round-robin and free space awareness.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🛡️</div>
+          <h3>Failure Isolation</h3>
+          <p>One disk fails = only files on that disk are affected. No striping risk.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🌐</div>
+          <h3>Multi-Protocol Access</h3>
+          <p>FUSE • SFTP • WebDAV • NFS + Docker Filebrowser</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="quickstart">
+    <div class="container">
+      <h2>Get Started in Minutes</h2>
+      <div class="terminal">
+        <pre>git clone https://github.com/VulcanoSoftware/MultiDiskFileBalancer.git
+cd MultiDiskFileBalancer/MultiDisk-FileBalancer
+pip install -r requirements.txt --break-system-packages
+sudo python multidisk_filebalancer.py</pre>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made with ❤️ for my final school project — 2026</p>
+    <p>MultiDisk FileBalancer by VulcanoSoftware</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

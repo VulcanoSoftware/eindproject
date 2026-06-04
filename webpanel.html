@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MultiDisk FileBalancer</title>
+    <link href="/webpanel.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-title">MultiDisk FileBalancer</div>
+          <div class="badge" id="statusBadge">Status: loading…</div>
+        </div>
+        <nav class="nav">
+          <button class="nav-item active" data-view="dashboard">Dashboard</button>
+          <button class="nav-item" data-view="config">Config</button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="muted" id="uptimeText">Uptime: —</div>
+          <div class="muted" id="configPathText">Config: —</div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section class="view active" id="view-dashboard">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Dashboard</div>
+              <div class="page-sub" id="lastUpdatedText">Last updated: —</div>
+            </div>
+            <div class="header-actions">
+              <button class="btn secondary" id="refreshNow" type="button">Refresh</button>
+            </div>
+          </div>
+
+          <div class="grid cards">
+            <div class="card">
+              <div class="card-title">Files moved</div>
+              <div class="card-value" id="movedFilesTotal">—</div>
+              <div class="card-sub" id="movedBytesTotal">—</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Last action</div>
+              <div class="card-value" id="lastAction">—</div>
+              <div class="card-sub" id="lastActionAt">—</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Last cycle</div>
+              <div class="card-value" id="cycleSummary">—</div>
+              <div class="card-sub" id="cycleNextRun">—</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Errors</div>
+              <div class="card-value" id="errorsTotal">—</div>
+              <div class="card-sub" id="cleanupTotal">—</div>
+            </div>
+          </div>
+
+          <div class="grid charts">
+            <div class="panel">
+              <div class="panel-title">Disk usage</div>
+              <canvas id="diskUsageChart" height="140"></canvas>
+              <div class="hint" id="diskUsageHint"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-title">Moves (recent)</div>
+              <canvas id="movesChart" height="140"></canvas>
+              <div class="hint" id="movesHint"></div>
+            </div>
+          </div>
+
+          <div class="grid split">
+            <div class="panel">
+              <div class="panel-title">Disks</div>
+              <div class="data-table" id="disksOverview"></div>
+              <div class="hint" id="disksOverviewHint"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-title">Recent events</div>
+              <div class="events" id="recentEvents"></div>
+              <div class="hint" id="recentEventsHint"></div>
+            </div>
+          </div>
+
+          <div class="grid split">
+            <div class="panel">
+              <div class="panel-title">Services</div>
+              <div class="kv" id="servicesList"></div>
+              <div class="hint" id="servicesHint"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-title">Insights</div>
+              <div class="insights" id="insights"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-config">
+          <div class="panel">
+            <div class="panel-title">Edit config.yml</div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label>Webhook URL</label>
+                <input id="cfg-webhook_url" type="text" placeholder="https://discord.com/api/webhooks/…">
+              </div>
+              <div class="field">
+                <label>Backup strategy</label>
+                <select id="cfg-settings-backup_strategy">
+                  <option value="round_robin">round_robin (default)</option>
+                  <option value="most_free_space">most_free_space</option>
+                  <option value="least_used_pct">least_used_pct</option>
+                  <option value="path_hash">path_hash</option>
+                </select>
+                <div class="hint" id="backupStrategyHelp"></div>
+              </div>
+              <div class="field">
+                <label>RAID level</label>
+                <select id="cfg-settings-raid_simulation">
+                  <option value="raid0">RAID 0</option>
+                  <option value="raid1">RAID 1</option>
+                  <option value="raid5">RAID 5</option>
+                  <option value="raid6">RAID 6</option>
+                  <option value="raid10">RAID 10</option>
+                </select>
+                <div class="hint" id="raidSimulationHelp"></div>
+              </div>
+              <div class="field">
+                <label>Scan interval (sec)</label>
+                <input id="cfg-settings-scan_interval_seconds" type="number" min="1" step="1">
+              </div>
+              <div class="field">
+                <label>Min file age (hours)</label>
+                <input id="cfg-settings-min_file_age_hours" type="number" min="0" step="1">
+              </div>
+              <div class="field">
+                <label>Extra safety space (GB)</label>
+                <input id="cfg-settings-extra_safety_space_gb" type="number" min="0" step="1">
+              </div>
+              <div class="field">
+                <label>Console clear interval (hours)</label>
+                <input id="cfg-settings-console_clear_interval_hours" type="number" min="0" step="1">
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Input folders</div>
+              <div class="list" id="srcFoldersList"></div>
+              <button class="btn secondary" id="addSrcFolder" type="button">Add input folder</button>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Disks</div>
+              <div class="table" id="disksTable"></div>
+              <button class="btn secondary" id="addDisk" type="button">Add disk</button>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Space Hunter</div>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Default min free (GB)</label>
+                  <input id="cfg-settings-space_check_default_min_free_gb" type="number" min="0" step="1">
+                </div>
+                <div class="field">
+                  <label>Min file age (hours)</label>
+                  <input id="cfg-settings-space_hunter_min_file_age_hours" type="number" min="0" step="1">
+                </div>
+                <div class="field">
+                  <label>Dry run</label>
+                  <select id="cfg-settings-space_hunter_dry_run">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Max actions per cycle (0 = unlimited)</label>
+                  <input id="cfg-settings-space_hunter_max_actions_per_cycle" type="number" min="0" step="1">
+                </div>
+                <div class="field">
+                  <label>Global fallback</label>
+                  <select id="cfg-settings-space_hunter_global_fallback">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label>Exclude folders (one per line)</label>
+                <textarea class="textarea" id="cfg-settings-space_hunter_exclude_folders" rows="4" placeholder="/path/to/folder&#10;/path/to/other"></textarea>
+              </div>
+              <div class="table" id="spaceHunterTable"></div>
+              <button class="btn secondary" id="addSpaceHunter" type="button">Add Space Hunter disk</button>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Reverse RAID</div>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Enabled</label>
+                  <select id="cfg-reverse_raid-enabled">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Destination path</label>
+                  <input id="cfg-reverse_raid-destination_path" type="text" placeholder="/path/to/destination">
+                </div>
+                <div class="field">
+                  <label>Min file age (hours)</label>
+                  <input id="cfg-reverse_raid-min_file_age_hours" type="number" min="0" step="1">
+                </div>
+                <div class="field">
+                  <label>Run interval (minutes)</label>
+                  <input id="cfg-reverse_raid-run_interval_minutes" type="number" min="0" step="1">
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">Source paths</div>
+                <div class="list" id="reverseRaidSourcesList"></div>
+                <button class="btn secondary" id="addReverseRaidSource" type="button">Add source path</button>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Services</div>
+              <div class="form-grid">
+                <div class="field">
+                  <label>WebDAV enabled</label>
+                  <select id="cfg-webdav_server-enabled">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>WebDAV port</label>
+                  <input id="cfg-webdav_server-port" type="number" min="1" max="65535" step="1">
+                </div>
+                <div class="field">
+                  <label>WebDAV username</label>
+                  <input id="cfg-webdav_server-username" type="text">
+                </div>
+                <div class="field">
+                  <label>WebDAV password</label>
+                  <input id="cfg-webdav_server-password" type="text">
+                </div>
+                <div class="field">
+                  <label>SFTP enabled</label>
+                  <select id="cfg-sftp_server-enabled">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>SFTP port</label>
+                  <input id="cfg-sftp_server-port" type="number" min="1" max="65535" step="1">
+                </div>
+                <div class="field">
+                  <label>SFTP username</label>
+                  <input id="cfg-sftp_server-username" type="text">
+                </div>
+                <div class="field">
+                  <label>SFTP password</label>
+                  <input id="cfg-sftp_server-password" type="text">
+                </div>
+                <div class="field">
+                  <label>NFS enabled</label>
+                  <select id="cfg-nfs_server-enabled">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>NFS permitted</label>
+                  <input id="cfg-nfs_server-permitted" type="text" placeholder="*">
+                </div>
+                <div class="field">
+                  <label>FUSE enabled</label>
+                  <select id="cfg-fuse_server-enabled">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>FUSE mount point</label>
+                  <input id="cfg-fuse_server-mount_point" type="text" placeholder="/home/user/Desktop/mount">
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Filebrowser</div>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Enabled</label>
+                  <select id="cfg-filebrowser-enabled">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Port</label>
+                  <input id="cfg-filebrowser-port" type="number" min="1" max="65535" step="1">
+                </div>
+                <div class="field">
+                  <label>State dir</label>
+                  <input id="cfg-filebrowser-state_dir" type="text" placeholder="/path/to/filebrowser/state">
+                </div>
+                <div class="field">
+                  <label>Username</label>
+                  <input id="cfg-filebrowser-username" type="text">
+                </div>
+                <div class="field">
+                  <label>Password</label>
+                  <input id="cfg-filebrowser-password" type="text">
+                </div>
+                <div class="field">
+                  <label>Docker image</label>
+                  <input id="cfg-filebrowser-image" type="text" placeholder="filebrowser/filebrowser:v2.63.5">
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Webpanel</div>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Enabled</label>
+                  <select id="cfg-webpanel-enabled">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Host</label>
+                  <input id="cfg-webpanel-host" type="text" placeholder="127.0.0.1">
+                </div>
+                <div class="field">
+                  <label>Port</label>
+                  <input id="cfg-webpanel-port" type="number" min="1" max="65535" step="1">
+                </div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn secondary" id="reloadConfig" type="button">Reload</button>
+              <button class="btn" id="saveConfig" type="button">Save</button>
+              <div class="status" id="saveStatus"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/webpanel.js"></script>
+  </body>
+</html>
