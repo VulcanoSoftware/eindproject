@@ -1,5 +1,5 @@
 # MultiDisk FileBalancer
-
+<img width="1024" height="1024" alt="logo" src="https://github.com/user-attachments/assets/2afd73b5-bb1e-4d3d-ba74-299926c4a423" />
 A software-defined storage orchestration tool that distributes files across multiple disks while exposing them as a **single unified filesystem**.
 
 Inspired by RAID 0 — but safer, more flexible, and fully software-based.
