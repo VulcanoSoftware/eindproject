@@ -1,7 +1,7 @@
-<div align="center">
 # MultiDisk FileBalancer
+<div align="center">
   <img width="256" height="256" alt="logo" src="https://github.com/user-attachments/assets/2afd73b5-bb1e-4d3d-ba74-299926c4a423" />
-
+</div>
 
 A software-defined storage orchestration tool that distributes files across multiple disks while exposing them as a **single unified filesystem**.
 
@@ -421,5 +421,3 @@ pyudev        # USB/external drive automount
 - Graceful degraded mode when disks go missing
 - Automatic disk reintegration after reconnect
 - Windows and macOS support
-
-</div>
