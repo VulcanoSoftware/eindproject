@@ -5,7 +5,7 @@ A software-defined storage orchestration tool that distributes files across mult
 Inspired by RAID 0 — but safer, more flexible, and fully software-based.
 
 📚 **Full documentation:** [https://multidisk-filebalancer-docs.vercel.app/](https://multidisk-filebalancer-docs.vercel.app/)
----
+
 📚 **Showcase website:** [https://mdfb.vulcanocraft.com/](https://mdfb.vulcanocraft.com/)
 
 ---
